@@ -6,11 +6,11 @@ PTHREAD = -pthread
 
 # 所有目標
 .PHONY: all clean help process pipe fifo signal fileio thread shm socket epoll daemon semaphore \
-        condition-var rwlock message-queue mmap select-poll udp-socket timer
+        condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils
 
 # 默認目標
 all: process pipe fifo signal fileio thread shm socket epoll daemon semaphore \
-     condition-var rwlock message-queue mmap select-poll udp-socket timer
+     condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils
 	@echo ""
 	@echo "============================================"
 	@echo "  所有範例編譯完成！"
@@ -158,6 +158,18 @@ udp-socket:
 	@echo "  ✓ udp_server"
 	@echo "  ✓ udp_client"
 
+# 19-IPC 性能對比
+ipc-benchmark:
+	@echo "編譯 IPC 性能對比工具..."
+	@$(CC) $(CFLAGS) -o 19-ipc-benchmark/ipc_benchmark 19-ipc-benchmark/ipc_benchmark.c -lrt
+	@echo "  ✓ ipc_benchmark"
+
+# 工具庫
+utils:
+	@echo "編譯工具庫範例..."
+	@$(CC) $(CFLAGS) -o utils/config_demo utils/config_demo.c
+	@echo "  ✓ config_demo"
+
 # 清理
 clean:
 	@echo "清理編譯文件..."
@@ -166,10 +178,10 @@ clean:
 	@rm -f 03-fifo/fifo_writer 03-fifo/fifo_reader
 	@rm -f 04-signal/signal_demo
 	@rm -f 05-file-io/file_operations 05-file-io/test_data.txt
-	@rm -f 06-thread/thread_demo
+	@rm -f 06-thread/thread_demo 06-thread/thread_pool
 	@rm -f 07-shared-memory/shm_writer 07-shared-memory/shm_reader
-	@rm -f 08-socket/tcp_server 08-socket/tcp_client
-	@rm -f 09-epoll/epoll_server
+	@rm -f 08-socket/tcp_server 08-socket/tcp_client 08-socket/tcp_echo_advanced
+	@rm -f 09-epoll/epoll_server 09-epoll/http_server_simple
 	@rm -f 10-daemon/daemon_demo
 	@rm -f 11-semaphore/semaphore_demo
 	@rm -f 12-condition-var/cond_basic 12-condition-var/producer_consumer 12-condition-var/cond_vs_semaphore
@@ -179,6 +191,8 @@ clean:
 	@rm -f 16-timer/alarm_demo 16-timer/setitimer_demo
 	@rm -f 17-select-poll/select_server 17-select-poll/poll_server
 	@rm -f 18-udp-socket/udp_server 18-udp-socket/udp_client
+	@rm -f 19-ipc-benchmark/ipc_benchmark
+	@rm -f utils/config_demo
 	@rm -f pipe/a.out
 	@echo "清理完成！"
 
@@ -210,3 +224,5 @@ help:
 	@echo "  make timer          - 16-定時器 🆕"
 	@echo "  make select-poll    - 17-select/poll 🆕"
 	@echo "  make udp-socket     - 18-UDP Socket 🆕"
+	@echo "  make ipc-benchmark  - 19-IPC 性能對比 🆕"
+	@echo "  make utils          - 工具庫範例 🆕"

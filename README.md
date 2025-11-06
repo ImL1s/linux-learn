@@ -23,7 +23,9 @@ linux-learn/
 ├── 15-mmap/             # 內存映射 🆕
 ├── 16-timer/            # 定時器 🆕
 ├── 17-select-poll/      # select/poll 🆕
-└── 18-udp-socket/       # UDP Socket 🆕
+├── 18-udp-socket/       # UDP Socket 🆕
+├── 19-ipc-benchmark/    # IPC 性能對比工具 ⭐
+└── utils/               # 實用工具庫 ⭐
 ```
 
 ## 🎯 學習路徑
@@ -201,6 +203,57 @@ linux-learn/
   - 三種定時器對比
 - **示例**: 2個程式
 
+### 階段 6：增強範例與工具 ⭐
+
+#### 19. IPC 性能對比工具 ⭐
+- **位置**: `19-ipc-benchmark/`
+- **內容**:
+  - 5種IPC機制性能測試（pipe, FIFO, 共享內存, 消息隊列, Unix Socket）
+  - 吞吐量測試（MB/s）
+  - 延遲測試（微秒級）
+  - 命令行參數支持（數據大小、塊大小、測試類型）
+  - 詳細性能分析和選擇建議
+- **示例**: 1個工具（900+行）
+- **README**: 600+行完整文檔
+
+#### 實用工具庫 (Utils) ⭐
+- **位置**: `utils/`
+- **內容**:
+  - **config_parser.h** - INI 格式配置文件解析器（Header-only）
+    - 支持 Section/Key/Value 結構
+    - 類型轉換（string/int/bool）
+    - 默認值支持
+    - 易於集成到項目中
+  - **config_demo.c** - 配置解析器使用示範
+- **示例**: 1個演示程式
+- **README**: 500+行 API 文檔
+
+#### 增強版範例 ⭐
+以下範例在原有基礎上增加了實用性和靈活性：
+
+**tcp_echo_advanced.c** (08-socket/)
+- 命令行參數支持（端口、模式、最大連接數）
+- 多工作模式（fork/thread）
+- 統計功能（連接數、數據量、運行時間）
+- 日誌級別控制
+- 660行完整實現
+
+**thread_pool.c** (06-thread/)
+- 可配置線程數量
+- 任務隊列管理
+- 優雅關閉機制
+- 統計信息輸出
+- 可直接用於實際項目
+- 600行專業實現
+
+**http_server_simple.c** (09-epoll/)
+- 簡單的HTTP/1.1服務器
+- 靜態文件服務
+- 12種MIME類型支持
+- URL解碼和安全路徑檢查
+- 目錄瀏覽功能
+- 600行實戰示範
+
 ## 🔨 編譯與運行
 
 ### 編譯所有範例
@@ -212,10 +265,15 @@ make all
 ### 編譯特定模塊
 
 ```bash
-make process       # 編譯進程管理
-make condition-var # 編譯條件變量
-make select-poll   # 編譯 select/poll
-make udp-socket    # 編譯 UDP socket
+make process        # 編譯進程管理
+make thread         # 編譯多線程（包含 thread_pool）
+make socket         # 編譯 Socket（包含 tcp_echo_advanced）
+make epoll          # 編譯 epoll（包含 http_server_simple）
+make condition-var  # 編譯條件變量
+make select-poll    # 編譯 select/poll
+make udp-socket     # 編譯 UDP socket
+make ipc-benchmark  # 編譯 IPC 性能對比工具 ⭐
+make utils          # 編譯工具庫範例 ⭐
 # ... 以此類推
 ```
 
@@ -230,6 +288,7 @@ make clean
 進入各個目錄，執行對應的可執行文件：
 
 ```bash
+# 基礎範例
 cd 12-condition-var
 ./cond_basic
 ./producer_consumer
@@ -238,15 +297,40 @@ cd ../17-select-poll
 ./select_server  # 終端1
 ./poll_server    # 或終端1
 telnet localhost 9000  # 終端2
+
+# 增強版範例 ⭐
+cd ../08-socket
+./tcp_echo_advanced --port 9999 --mode thread --max-conn 100 --verbose
+
+cd ../06-thread
+./thread_pool  # 線程池演示
+
+cd ../09-epoll
+./http_server_simple --port 8080 --root ./www
+
+# IPC 性能對比工具 ⭐
+cd ../19-ipc-benchmark
+./ipc_benchmark                    # 測試所有 IPC 機制（默認 1MB）
+./ipc_benchmark --size 10M         # 測試 10MB 數據
+./ipc_benchmark pipe shm socket    # 只測試特定機制
+
+# 配置解析器 ⭐
+cd ../utils
+./config_demo                      # 使用示範
+./config_demo my_config.ini        # 自定義配置文件
 ```
 
 ## 📊 專案統計
 
-- **主題數量**: 18個（11個基礎 + 7個新增）
-- **源文件**: 35+ 個
-- **代碼行數**: 9000+ 行（含詳細註解）
-- **文檔行數**: 6000+ 行
-- **README平均**: 300+ 行/個
+- **主題數量**: 19個（11個基礎 + 7個進階 + IPC性能對比）
+- **源文件**: 38個可執行程式
+  - 基礎範例: 35個
+  - 增強範例: 3個（thread_pool, tcp_echo_advanced, http_server_simple）
+  - 工具程式: 2個（ipc_benchmark, config_demo）
+- **代碼行數**: 12,000+ 行（含詳細註解）
+- **文檔行數**: 8,000+ 行
+- **README平均**: 400+ 行/個
+- **最大單文件**: 900+ 行（ipc_benchmark.c）
 
 ## ✨ 專案特色
 
@@ -271,10 +355,25 @@ telnet localhost 9000  # 終端2
 ### 4. 對比性學習
 
 - ✅ 條件變量 vs 信號量
-- ✅ select vs poll vs epoll  
+- ✅ select vs poll vs epoll
 - ✅ TCP vs UDP
 - ✅ mmap vs read/write
 - ✅ 各種 IPC 機制對比
+
+### 5. 實用性增強 ⭐
+
+- ✅ **IPC 性能對比工具** - 幫助選擇最適合的 IPC 機制
+- ✅ **配置文件解析器** - 可直接用於實際項目的 header-only 庫
+- ✅ **線程池實現** - 專業級線程池，可重用組件
+- ✅ **增強版網絡服務器** - 支持命令行參數和統計功能
+- ✅ **簡易 HTTP 服務器** - 實戰示範，組合多種技術
+
+### 6. 靈活可配置 ⭐
+
+- ✅ 支持命令行參數（端口、模式、大小等）
+- ✅ 配置文件支持（INI 格式）
+- ✅ 統計信息輸出（性能監控）
+- ✅ 多種工作模式（fork/thread/epoll）
 
 ## 📖 學習建議
 
