@@ -58,7 +58,9 @@ fileio:
 thread:
 	@echo "編譯多線程範例..."
 	@$(CC) $(CFLAGS) $(PTHREAD) -o 06-thread/thread_demo 06-thread/thread_demo.c
+	@$(CC) $(CFLAGS) $(PTHREAD) -o 06-thread/thread_pool 06-thread/thread_pool.c
 	@echo "  ✓ thread_demo"
+	@echo "  ✓ thread_pool"
 
 # 07-共享內存
 shm:
@@ -73,14 +75,18 @@ socket:
 	@echo "編譯 Socket 範例..."
 	@$(CC) $(CFLAGS) -o 08-socket/tcp_server 08-socket/tcp_server.c
 	@$(CC) $(CFLAGS) -o 08-socket/tcp_client 08-socket/tcp_client.c
+	@$(CC) $(CFLAGS) $(PTHREAD) -o 08-socket/tcp_echo_advanced 08-socket/tcp_echo_advanced.c
 	@echo "  ✓ tcp_server"
 	@echo "  ✓ tcp_client"
+	@echo "  ✓ tcp_echo_advanced"
 
 # 09-epoll
 epoll:
 	@echo "編譯 epoll 範例..."
 	@$(CC) $(CFLAGS) -o 09-epoll/epoll_server 09-epoll/epoll_server.c
+	@$(CC) $(CFLAGS) -o 09-epoll/http_server_simple 09-epoll/http_server_simple.c
 	@echo "  ✓ epoll_server"
+	@echo "  ✓ http_server_simple"
 
 # 10-守護進程
 daemon:
