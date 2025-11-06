@@ -12,7 +12,11 @@ linux-learn/
 ├── 04-signal/           # 信號處理
 ├── 05-file-io/          # 文件 I/O 操作
 ├── 06-thread/           # 多線程編程
-└── 07-shared-memory/    # 共享內存
+├── 07-shared-memory/    # 共享內存
+├── 08-socket/           # Socket 網路編程
+├── 09-epoll/            # epoll I/O 多路復用
+├── 10-daemon/           # 守護進程
+└── 11-semaphore/        # 信號量
 ```
 
 ## 🎯 學習主題
@@ -66,6 +70,38 @@ linux-learn/
   - System V 共享內存
   - 共享內存的創建與映射
   - 進程間數據共享
+
+### 8. Socket 網路編程 (Socket Programming)
+- **位置**: `08-socket/`
+- **內容**:
+  - TCP 客戶端/服務器
+  - socket/bind/listen/accept
+  - 網絡字節序轉換
+  - 多進程並發處理
+
+### 9. epoll I/O 多路復用 (epoll)
+- **位置**: `09-epoll/`
+- **內容**:
+  - epoll 高性能服務器
+  - 邊緣觸發 vs 水平觸發
+  - 非阻塞 I/O
+  - 單線程處理高並發
+
+### 10. 守護進程 (Daemon)
+- **位置**: `10-daemon/`
+- **內容**:
+  - 守護進程標準創建流程
+  - 會話和進程組
+  - PID 文件鎖
+  - syslog 日誌系統
+
+### 11. 信號量 (Semaphore)
+- **位置**: `11-semaphore/`
+- **內容**:
+  - POSIX 信號量
+  - 生產者-消費者問題
+  - 互斥與同步
+  - P/V 操作
 
 ## 🔨 編譯與運行
 
