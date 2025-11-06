@@ -1,2 +1,0 @@
-Hello, Linux File I/O!
-這是測試數據。

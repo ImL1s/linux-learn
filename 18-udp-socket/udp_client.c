@@ -33,7 +33,7 @@ int main(void) {
     
     while (1) {
         printf("> ");
-        fgets(send_buf, BUFFER_SIZE, stdin);
+        if (!fgets(send_buf, BUFFER_SIZE, stdin)) break;
         
         if (strncmp(send_buf, "quit", 4) == 0) {
             break;
