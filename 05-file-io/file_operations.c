@@ -159,14 +159,14 @@ void demo_lseek(void)
 
     // 1. 讀取開頭 10 字節
     memset(buffer, 0, sizeof(buffer));
-    read(fd, buffer, 10);
-    printf("[1] 從開頭讀取 10 字節: %s\n", buffer);
+    ssize_t n = read(fd, buffer, 10);
+    printf("[1] 從開頭讀取 10 字節 (%ld bytes): %s\n", n, buffer);
 
     // 2. 移動到開頭，重新讀取
     lseek(fd, 0, SEEK_SET);
     memset(buffer, 0, sizeof(buffer));
-    read(fd, buffer, 10);
-    printf("[2] 重新從開頭讀取: %s\n", buffer);
+    n = read(fd, buffer, 10);
+    printf("[2] 重新從開頭讀取 (%ld bytes): %s\n", n, buffer);
 
     // 3. 移動到文件末尾
     offset = lseek(fd, 0, SEEK_END);
@@ -175,8 +175,8 @@ void demo_lseek(void)
     // 4. 從末尾往前 10 字節
     lseek(fd, -10, SEEK_END);
     memset(buffer, 0, sizeof(buffer));
-    read(fd, buffer, 10);
-    printf("[4] 從末尾往前 10 字節: %s\n", buffer);
+    n = read(fd, buffer, 10);
+    printf("[4] 從末尾往前 10 字節 (%ld bytes): %s\n", n, buffer);
 
     close(fd);
 }

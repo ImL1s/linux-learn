@@ -44,6 +44,7 @@ void sigint_handler(int signum)
  */
 void sigusr1_handler(int signum)
 {
+    (void)signum;  // 明確標記未使用
     usr1_count++;
     printf("\n[信號] 收到 SIGUSR1 (第 %d 次)\n", usr1_count);
 }
@@ -53,6 +54,7 @@ void sigusr1_handler(int signum)
  */
 void sigterm_handler(int signum)
 {
+    (void)signum;  // 明確標記未使用
     printf("\n[信號] 收到 SIGTERM，執行清理工作...\n");
     printf("[信號] 清理完成，退出程序\n");
     exit(EXIT_SUCCESS);
@@ -63,6 +65,7 @@ void sigterm_handler(int signum)
  */
 void sigalrm_handler(int signum)
 {
+    (void)signum;  // 明確標記未使用
     static int alarm_count = 0;
     alarm_count++;
     printf("[定時器] 鬧鐘響了！(第 %d 次)\n", alarm_count);

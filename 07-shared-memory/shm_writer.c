@@ -126,6 +126,7 @@ int main(void)
         shared_mem->flag = 0;  // 標記為正在寫入
         shared_mem->counter++;
         strncpy(shared_mem->message, input, sizeof(shared_mem->message) - 1);
+        shared_mem->message[sizeof(shared_mem->message) - 1] = '\0';  // 確保 null 終止
         shared_mem->flag = 1;  // 標記為可讀
 
         printf("  → 已寫入共享內存 (計數: %d)\n\n", shared_mem->counter);

@@ -21,7 +21,7 @@
 
 #define BUFFER_SIZE 1024
 
-int main(int argc, char *argv[])
+int main(void)
 {
     pid_t pid;
     char buf[BUFFER_SIZE];
