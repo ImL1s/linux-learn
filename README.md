@@ -25,6 +25,7 @@ linux-learn/
 ├── 17-select-poll/      # select/poll 🆕
 ├── 18-udp-socket/       # UDP Socket 🆕
 ├── 19-ipc-benchmark/    # IPC 性能對比工具 ⭐
+├── 20-memory-safety/    # 內存安全基礎 (教育目的) 🔒
 └── utils/               # 實用工具庫 ⭐
 ```
 
@@ -254,6 +255,35 @@ linux-learn/
 - 目錄瀏覽功能
 - 600行實戰示範
 
+### 階段 7：系統安全基礎 🔒
+
+#### 20. 內存安全基礎 (Memory Safety) 🔒
+- **位置**: `20-memory-safety/`
+- **⚠️ 重要**: 僅供教育和研究目的使用
+- **內容**:
+  - Stack 和 Heap 內存布局
+  - 緩衝區溢出原理與演示（受控環境）
+  - Stack Canary 防護機制
+  - ASLR, NX/DEP, PIE 防禦技術
+  - 安全的字符串操作
+  - CVE 案例研究
+- **示例**: 4個教育程式
+  - `stack_layout` - 棧結構展示
+  - `buffer_overflow_demo` - 緩衝區溢出演示（教育）
+  - `canary_demo` - Stack canary 檢測
+  - `safe_string` - 安全字符串庫
+- **README**: 詳盡的安全教育文檔
+
+**道德聲明**:
+- ✅ 適用於: CTF 競賽、安全研究、授權滲透測試、防禦性安全
+- ❌ 禁止用於: 未經授權的系統、惡意攻擊、破壞性行為
+- 📚 完整規劃: 見 `SECURITY_PROJECT_PLAN.md`
+
+**安全學習路徑** (計劃中):
+- 階段1: 基礎（內存安全、文件安全、進程安全）
+- 階段2: 進階（格式化字符串、競爭條件、網絡安全、加密）
+- 階段3: 深入（ROP、內核安全、Web安全、逆向工程、滲透測試）
+
 ## 🔨 編譯與運行
 
 ### 編譯所有範例
@@ -274,6 +304,7 @@ make select-poll    # 編譯 select/poll
 make udp-socket     # 編譯 UDP socket
 make ipc-benchmark  # 編譯 IPC 性能對比工具 ⭐
 make utils          # 編譯工具庫範例 ⭐
+make memory-safety  # 編譯內存安全範例 (教育目的) 🔒
 # ... 以此類推
 ```
 
@@ -322,14 +353,15 @@ cd ../utils
 
 ## 📊 專案統計
 
-- **主題數量**: 19個（11個基礎 + 7個進階 + IPC性能對比）
-- **源文件**: 38個可執行程式
+- **主題數量**: 20個（11個基礎 + 7個進階 + 工具 + 安全）
+- **源文件**: 42個可執行程式
   - 基礎範例: 35個
   - 增強範例: 3個（thread_pool, tcp_echo_advanced, http_server_simple）
   - 工具程式: 2個（ipc_benchmark, config_demo）
-- **代碼行數**: 12,000+ 行（含詳細註解）
-- **文檔行數**: 8,000+ 行
-- **README平均**: 400+ 行/個
+  - 安全教育: 4個（stack_layout, buffer_overflow_demo, canary_demo, safe_string）
+- **代碼行數**: 15,000+ 行（含詳細註解）
+- **文檔行數**: 10,000+ 行（含安全規劃文檔）
+- **README平均**: 450+ 行/個
 - **最大單文件**: 900+ 行（ipc_benchmark.c）
 
 ## ✨ 專案特色

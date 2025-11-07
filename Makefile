@@ -6,11 +6,13 @@ PTHREAD = -pthread
 
 # 所有目標
 .PHONY: all clean help process pipe fifo signal fileio thread shm socket epoll daemon semaphore \
-        condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils
+        condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils \
+        memory-safety
 
 # 默認目標
 all: process pipe fifo signal fileio thread shm socket epoll daemon semaphore \
-     condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils
+     condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils \
+     memory-safety
 	@echo ""
 	@echo "============================================"
 	@echo "  所有範例編譯完成！"
@@ -170,6 +172,18 @@ utils:
 	@$(CC) $(CFLAGS) -o utils/config_demo utils/config_demo.c
 	@echo "  ✓ config_demo"
 
+# 20-內存安全 (教育目的)
+memory-safety:
+	@echo "編譯內存安全範例 (教育目的)..."
+	@$(CC) $(CFLAGS) -o 20-memory-safety/stack_layout 20-memory-safety/stack_layout.c
+	@$(CC) -fno-stack-protector -z execstack -no-pie -g -o 20-memory-safety/buffer_overflow_demo 20-memory-safety/buffer_overflow_demo.c
+	@$(CC) -fstack-protector-all -o 20-memory-safety/canary_demo 20-memory-safety/canary_demo.c
+	@$(CC) $(CFLAGS) -o 20-memory-safety/safe_string 20-memory-safety/safe_string.c
+	@echo "  ✓ stack_layout"
+	@echo "  ✓ buffer_overflow_demo"
+	@echo "  ✓ canary_demo"
+	@echo "  ✓ safe_string"
+
 # 清理
 clean:
 	@echo "清理編譯文件..."
@@ -193,6 +207,7 @@ clean:
 	@rm -f 18-udp-socket/udp_server 18-udp-socket/udp_client
 	@rm -f 19-ipc-benchmark/ipc_benchmark
 	@rm -f utils/config_demo
+	@rm -f 20-memory-safety/stack_layout 20-memory-safety/buffer_overflow_demo 20-memory-safety/canary_demo 20-memory-safety/safe_string
 	@rm -f pipe/a.out
 	@echo "清理完成！"
 
@@ -226,3 +241,4 @@ help:
 	@echo "  make udp-socket     - 18-UDP Socket 🆕"
 	@echo "  make ipc-benchmark  - 19-IPC 性能對比 🆕"
 	@echo "  make utils          - 工具庫範例 🆕"
+	@echo "  make memory-safety  - 20-內存安全 (教育目的) 🔒"
