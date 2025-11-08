@@ -26,6 +26,7 @@ linux-learn/
 ├── 18-udp-socket/       # UDP Socket 🆕
 ├── 19-ipc-benchmark/    # IPC 性能對比工具 ⭐
 ├── 20-memory-safety/    # 內存安全基礎 (教育目的) 🔒
+├── 21-file-security/    # 文件權限與訪問控制 (教育目的) 🔒
 └── utils/               # 實用工具庫 ⭐
 ```
 
@@ -274,6 +275,22 @@ linux-learn/
   - `safe_string` - 安全字符串庫
 - **README**: 詳盡的安全教育文檔
 
+#### 21. 文件權限與訪問控制 (File Security) 🔒
+- **位置**: `21-file-security/`
+- **⚠️ 重要**: 僅供教育和研究目的使用
+- **內容**:
+  - Linux 權限模型（rwx、owner/group/other）
+  - 特殊權限位（SUID/SGID/Sticky Bit）
+  - Linux Capabilities 機制
+  - 權限提升原理（教育）
+  - 安全的臨時文件處理
+  - 防止符號鏈接攻擊
+- **示例**: 3個教育程式
+  - `permission_demo` - 權限檢查和展示
+  - `suid_example` - SUID 程式演示（教育）
+  - `secure_tempfile` - 安全臨時文件處理
+- **README**: CVE案例、最佳實踐
+
 **道德聲明**:
 - ✅ 適用於: CTF 競賽、安全研究、授權滲透測試、防禦性安全
 - ❌ 禁止用於: 未經授權的系統、惡意攻擊、破壞性行為
@@ -305,6 +322,7 @@ make udp-socket     # 編譯 UDP socket
 make ipc-benchmark  # 編譯 IPC 性能對比工具 ⭐
 make utils          # 編譯工具庫範例 ⭐
 make memory-safety  # 編譯內存安全範例 (教育目的) 🔒
+make file-security  # 編譯文件安全範例 (教育目的) 🔒
 # ... 以此類推
 ```
 
@@ -353,14 +371,16 @@ cd ../utils
 
 ## 📊 專案統計
 
-- **主題數量**: 20個（11個基礎 + 7個進階 + 工具 + 安全）
-- **源文件**: 42個可執行程式
+- **主題數量**: 21個（11個基礎 + 7個進階 + 工具 + 2個安全）
+- **源文件**: 45個可執行程式
   - 基礎範例: 35個
   - 增強範例: 3個（thread_pool, tcp_echo_advanced, http_server_simple）
   - 工具程式: 2個（ipc_benchmark, config_demo）
-  - 安全教育: 4個（stack_layout, buffer_overflow_demo, canary_demo, safe_string）
-- **代碼行數**: 15,000+ 行（含詳細註解）
-- **文檔行數**: 10,000+ 行（含安全規劃文檔）
+  - 安全教育: 7個
+    - 內存安全: 4個（stack_layout, buffer_overflow_demo, canary_demo, safe_string）
+    - 文件安全: 3個（permission_demo, suid_example, secure_tempfile）
+- **代碼行數**: 17,000+ 行（含詳細註解）
+- **文檔行數**: 12,000+ 行（含安全規劃文檔和教育材料）
 - **README平均**: 450+ 行/個
 - **最大單文件**: 900+ 行（ipc_benchmark.c）
 

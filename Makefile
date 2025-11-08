@@ -7,12 +7,12 @@ PTHREAD = -pthread
 # 所有目標
 .PHONY: all clean help process pipe fifo signal fileio thread shm socket epoll daemon semaphore \
         condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils \
-        memory-safety
+        memory-safety file-security
 
 # 默認目標
 all: process pipe fifo signal fileio thread shm socket epoll daemon semaphore \
      condition-var rwlock message-queue mmap select-poll udp-socket timer ipc-benchmark utils \
-     memory-safety
+     memory-safety file-security
 	@echo ""
 	@echo "============================================"
 	@echo "  所有範例編譯完成！"
@@ -184,6 +184,16 @@ memory-safety:
 	@echo "  ✓ canary_demo"
 	@echo "  ✓ safe_string"
 
+# 21-文件安全 (教育目的)
+file-security:
+	@echo "編譯文件安全範例 (教育目的)..."
+	@$(CC) $(CFLAGS) -o 21-file-security/permission_demo 21-file-security/permission_demo.c
+	@$(CC) $(CFLAGS) -o 21-file-security/suid_example 21-file-security/suid_example.c
+	@$(CC) $(CFLAGS) -o 21-file-security/secure_tempfile 21-file-security/secure_tempfile.c
+	@echo "  ✓ permission_demo"
+	@echo "  ✓ suid_example"
+	@echo "  ✓ secure_tempfile"
+
 # 清理
 clean:
 	@echo "清理編譯文件..."
@@ -208,6 +218,7 @@ clean:
 	@rm -f 19-ipc-benchmark/ipc_benchmark
 	@rm -f utils/config_demo
 	@rm -f 20-memory-safety/stack_layout 20-memory-safety/buffer_overflow_demo 20-memory-safety/canary_demo 20-memory-safety/safe_string
+	@rm -f 21-file-security/permission_demo 21-file-security/suid_example 21-file-security/secure_tempfile
 	@rm -f pipe/a.out
 	@echo "清理完成！"
 
@@ -242,3 +253,4 @@ help:
 	@echo "  make ipc-benchmark  - 19-IPC 性能對比 🆕"
 	@echo "  make utils          - 工具庫範例 🆕"
 	@echo "  make memory-safety  - 20-內存安全 (教育目的) 🔒"
+	@echo "  make file-security  - 21-文件安全 (教育目的) 🔒"
