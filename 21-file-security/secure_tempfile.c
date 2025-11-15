@@ -48,7 +48,6 @@ void safe_method_mkstemp(void) {
     char template[] = "/tmp/secure_temp.XXXXXX";
     int fd;
     struct stat st;
-    char mode_str[12];
 
     printf("\n" COLOR_GREEN "✓ 安全方法 1: mkstemp()" COLOR_RESET "\n");
     printf("模板: %s\n", template);
@@ -63,7 +62,9 @@ void safe_method_mkstemp(void) {
 
     /* 寫入數據 */
     const char *data = "安全的臨時數據\n";
-    write(fd, data, strlen(data));
+    if (write(fd, data, strlen(data)) == -1) {
+        perror("write");
+    }
 
     /* 設置正確的權限 */
     if (fchmod(fd, 0600) == 0) {
@@ -111,7 +112,9 @@ void safe_method_open_excl(void) {
 
     /* 寫入數據 */
     const char *data = "使用 O_EXCL 標誌的數據\n";
-    write(fd, data, strlen(data));
+    if (write(fd, data, strlen(data)) == -1) {
+        perror("write");
+    }
 
     printf(COLOR_GREEN "✓ 優點:\n");
     printf("  1. 原子操作，如果文件存在則失敗\n");
@@ -131,7 +134,10 @@ void demonstrate_symlink_protection(void) {
 
     /* 創建一個測試符號鏈接 */
     unlink(filename);  /* 清理可能存在的文件 */
-    symlink("/etc/passwd", filename);
+    if (symlink("/etc/passwd", filename) == -1) {
+        perror("symlink");
+        return;
+    }
     printf("創建符號鏈接: %s -> /etc/passwd\n", filename);
 
     /* 嘗試打開（不跟隨符號鏈接） */

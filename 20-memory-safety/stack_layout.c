@@ -267,6 +267,10 @@ void demonstrate_alignment(void) {
  * 主函數
  */
 int main(int argc, char *argv[]) {
+    /* 抑制未使用參數警告 */
+    (void)argc;
+    (void)argv;
+
     printf("╔════════════════════════════════════════════════════════════════════════════╗\n");
     printf("║                     Linux 棧結構與內存布局演示                              ║\n");
     printf("║                      Stack Layout Demonstration                           ║\n");

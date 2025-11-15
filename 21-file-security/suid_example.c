@@ -71,7 +71,9 @@ void demonstrate_privilege_operation(void) {
         /* 顯示文件所有者 */
         char cmd[256];
         snprintf(cmd, sizeof(cmd), "ls -l %s", test_file);
-        system(cmd);
+        if (system(cmd) == -1) {
+            fprintf(stderr, COLOR_RED "警告: 無法執行 ls 命令\n" COLOR_RESET);
+        }
 
         /* 清理 */
         unlink(test_file);
