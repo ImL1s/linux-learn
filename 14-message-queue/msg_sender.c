@@ -32,7 +32,9 @@ int main(void)
     struct msg_buffer msg;
     while (1) {
         printf("> ");
-        fgets(msg.msg_text, MAX_TEXT, stdin);
+        if (fgets(msg.msg_text, MAX_TEXT, stdin) == NULL) {
+            break;  /* EOF 或錯誤 */
+        }
         msg.msg_text[strcspn(msg.msg_text, "\n")] = 0;
         
         if (strcmp(msg.msg_text, "quit") == 0) break;

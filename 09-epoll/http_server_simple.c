@@ -433,7 +433,11 @@ void handle_request(int client_fd, const char *request)
 
     // 構建完整路徑
     char fullpath[MAX_PATH];
-    snprintf(fullpath, sizeof(fullpath), "%s%s", g_config.root_dir, decoded_path);
+    int n = snprintf(fullpath, sizeof(fullpath), "%s%s", g_config.root_dir, decoded_path);
+    if (n < 0 || n >= (int)sizeof(fullpath)) {
+        send_error(client_fd, 414, "Request-URI Too Long");
+        return;
+    }
 
     // 安全檢查：防止目錄遍歷攻擊
     char realpath_buf[MAX_PATH];
@@ -444,7 +448,10 @@ void handle_request(int client_fd, const char *request)
 
     // 確保路徑在根目錄內
     char real_root[MAX_PATH];
-    realpath(g_config.root_dir, real_root);
+    if (realpath(g_config.root_dir, real_root) == NULL) {
+        send_error(client_fd, 500, "Internal Server Error");
+        return;
+    }
     if (strncmp(realpath_buf, real_root, strlen(real_root)) != 0) {
         send_error(client_fd, 403, "Forbidden");
         return;
@@ -461,7 +468,11 @@ void handle_request(int client_fd, const char *request)
     if (S_ISDIR(st.st_mode)) {
         // 嘗試查找 index.html
         char index_path[MAX_PATH];
-        snprintf(index_path, sizeof(index_path), "%s/index.html", realpath_buf);
+        n = snprintf(index_path, sizeof(index_path), "%s/index.html", realpath_buf);
+        if (n < 0 || n >= (int)sizeof(index_path)) {
+            send_error(client_fd, 414, "Request-URI Too Long");
+            return;
+        }
 
         if (access(index_path, R_OK) == 0) {
             send_file(client_fd, index_path);

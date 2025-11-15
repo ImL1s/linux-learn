@@ -142,7 +142,6 @@ void* signaler_thread(void* arg)
 void demo_broadcast(void)
 {
     pthread_t waiters[3];
-    pthread_t signaler;
     int ids[3] = {1, 2, 3};
 
     printf("\n====== 演示 pthread_cond_broadcast() ======\n\n");

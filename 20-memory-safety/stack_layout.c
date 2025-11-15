@@ -166,6 +166,9 @@ void display_memory_layout(void) {
         const char *segment;
     } MemRegion;
 
+    /* 教育目的：演示棧地址布局（抑制 array-bounds 警告）*/
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
     MemRegion regions[] = {
         {"程式碼 (display_memory_layout 函數)", (void*)display_memory_layout, "TEXT段"},
         {"初始化全局變量 g_initialized", &g_initialized, "DATA段"},
@@ -176,6 +179,7 @@ void display_memory_layout(void) {
         {"棧變量 stack_var", &stack_var, "STACK段"},
         {"函數參數區域 (近似)", ((char*)&stack_var + 100), "STACK段"},
     };
+#pragma GCC diagnostic pop
 
     int count = sizeof(regions) / sizeof(regions[0]);
 

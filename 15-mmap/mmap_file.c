@@ -9,9 +9,13 @@
 int main(void) {
     const char *filepath = "test.txt";
     const char *text = "Hello, mmap!\n";
-    
+
     int fd = open(filepath, O_RDWR | O_CREAT, 0644);
-    write(fd, text, strlen(text));
+    if (write(fd, text, strlen(text)) == -1) {
+        perror("write");
+        close(fd);
+        return 1;
+    }
     
     struct stat sb;
     fstat(fd, &sb);

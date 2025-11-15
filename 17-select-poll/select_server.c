@@ -50,7 +50,8 @@ int main(void) {
         
         // 等待活動
         activity = select(max_fd + 1, &readfds, NULL, NULL, NULL);
-        
+        (void)activity;  /* 抑制未使用警告 */
+
         // 檢查新連接
         if (FD_ISSET(listen_fd, &readfds)) {
             new_socket = accept(listen_fd, NULL, NULL);

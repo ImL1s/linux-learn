@@ -40,7 +40,8 @@ int main(void) {
     
     while (1) {
         int ret = poll(fds, nfds, -1);
-        
+        (void)ret;  /* 抑制未使用警告 */
+
         // 檢查監聽socket
         if (fds[0].revents & POLLIN) {
             new_fd = accept(listen_fd, NULL, NULL);
