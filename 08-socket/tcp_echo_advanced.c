@@ -229,7 +229,10 @@ int handle_client_connection(int client_fd, struct sockaddr_in *client_addr,
         "其他輸入將被回顯\n"
         "----------------------------------------\n";
 
-    send(client_fd, welcome, strlen(welcome), 0);
+    ssize_t sent = send(client_fd, welcome, strlen(welcome), 0);
+    if (sent == -1) {
+        perror("[錯誤] send welcome");
+    }
 
     // 主循環
     long conn_recv = 0, conn_sent = 0;
@@ -263,10 +266,16 @@ int handle_client_connection(int client_fd, struct sockaddr_in *client_addr,
         // 處理命令
         if (strcmp(buffer, "quit") == 0) {
             const char *msg = "再見！\n";
-            send(client_fd, msg, strlen(msg), 0);
+            sent = send(client_fd, msg, strlen(msg), 0);
+            if (sent == -1) {
+                perror("[錯誤] send quit");
+            }
             break;
         } else if (strcmp(buffer, "help") == 0) {
-            send(client_fd, welcome, strlen(welcome), 0);
+            sent = send(client_fd, welcome, strlen(welcome), 0);
+            if (sent == -1) {
+                perror("[錯誤] send help");
+            }
         } else if (strcmp(buffer, "stats") == 0) {
             char stats_msg[512];
             pthread_mutex_lock(&stats->lock);
@@ -277,19 +286,29 @@ int handle_client_connection(int client_fd, struct sockaddr_in *client_addr,
                     stats->bytes_received,
                     stats->bytes_sent);
             pthread_mutex_unlock(&stats->lock);
-            send(client_fd, stats_msg, strlen(stats_msg), 0);
+            sent = send(client_fd, stats_msg, strlen(stats_msg), 0);
+            if (sent == -1) {
+                perror("[錯誤] send stats");
+            }
         } else if (strcmp(buffer, "time") == 0) {
             time_t now = time(NULL);
             char *time_str = ctime(&now);
             char time_msg[128];
             snprintf(time_msg, sizeof(time_msg), "服務器時間: %s", time_str);
-            send(client_fd, time_msg, strlen(time_msg), 0);
+            sent = send(client_fd, time_msg, strlen(time_msg), 0);
+            if (sent == -1) {
+                perror("[錯誤] send time");
+            }
         } else {
             // Echo 回去
             char echo_msg[config->buffer_size + 64];
             int len = snprintf(echo_msg, sizeof(echo_msg), "Echo: %s\n", buffer);
-            send(client_fd, echo_msg, len, 0);
-            conn_sent += len;
+            sent = send(client_fd, echo_msg, len, 0);
+            if (sent == -1) {
+                perror("[錯誤] send echo");
+            } else {
+                conn_sent += len;
+            }
         }
     }
 

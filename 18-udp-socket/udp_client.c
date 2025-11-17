@@ -40,9 +40,13 @@ int main(void) {
         }
         
         // 發送
-        sendto(sockfd, send_buf, strlen(send_buf), 0,
-               (struct sockaddr*)&server_addr, sizeof(server_addr));
-        
+        ssize_t sent = sendto(sockfd, send_buf, strlen(send_buf), 0,
+                              (struct sockaddr*)&server_addr, sizeof(server_addr));
+        if (sent == -1) {
+            perror("sendto");
+            continue;
+        }
+
         // 接收回顯
         int n = recvfrom(sockfd, recv_buf, BUFFER_SIZE, 0,
                          (struct sockaddr*)&server_addr, &addr_len);

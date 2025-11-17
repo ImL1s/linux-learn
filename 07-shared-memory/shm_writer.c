@@ -85,6 +85,8 @@ int main(void)
     shared_mem = (struct shared_data*)shmat(shmid, NULL, 0);
     if (shared_mem == (void*)-1) {
         perror("shmat failed");
+        // 清理已創建的共享內存段
+        shmctl(shmid, IPC_RMID, NULL);
         exit(EXIT_FAILURE);
     }
 
