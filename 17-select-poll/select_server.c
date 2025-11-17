@@ -77,7 +77,10 @@ int main(void) {
                 } else {
                     buffer[valread] = '\0';
                     printf("收到[%d]: %s", sd, buffer);
-                    send(sd, buffer, valread, 0);
+                    ssize_t sent = send(sd, buffer, valread, 0);
+                    if (sent == -1) {
+                        perror("send");
+                    }
                 }
             }
         }

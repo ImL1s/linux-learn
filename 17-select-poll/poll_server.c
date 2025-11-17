@@ -64,7 +64,10 @@ int main(void) {
                 } else {
                     buffer[n] = '\0';
                     printf("收到[%d]: %s", fds[i].fd, buffer);
-                    send(fds[i].fd, buffer, n, 0);
+                    ssize_t sent = send(fds[i].fd, buffer, n, 0);
+                    if (sent == -1) {
+                        perror("send");
+                    }
                 }
             }
         }

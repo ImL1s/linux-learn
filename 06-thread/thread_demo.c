@@ -112,6 +112,10 @@ void demo_basic_thread(void)
 
     if (pthread_create(&thread2, NULL, thread_function, &id2) != 0) {
         perror("pthread_create failed");
+        // ✅ 修復：清理第一個已創建的線程，避免資源洩漏
+        void *tmp_result;
+        pthread_join(thread1, &tmp_result);
+        free(tmp_result);
         return;
     }
 

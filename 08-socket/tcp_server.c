@@ -69,7 +69,10 @@ void handle_client(int client_fd, struct sockaddr_in *client_addr)
 
     // 發送歡迎消息
     const char *welcome = "歡迎連接到 TCP 服務器！\n輸入 'quit' 退出\n";
-    send(client_fd, welcome, strlen(welcome), 0);
+    ssize_t sent = send(client_fd, welcome, strlen(welcome), 0);
+    if (sent == -1) {
+        perror("[子進程] send welcome failed");
+    }
 
     // 主循環：接收並回顯客戶端消息
     while (1) {
@@ -95,7 +98,10 @@ void handle_client(int client_fd, struct sockaddr_in *client_addr)
         // 檢查退出命令
         if (strcmp(buffer, "quit") == 0) {
             const char *goodbye = "再見！\n";
-            send(client_fd, goodbye, strlen(goodbye), 0);
+            sent = send(client_fd, goodbye, strlen(goodbye), 0);
+            if (sent == -1) {
+                perror("[子進程] send goodbye failed");
+            }
             printf("[子進程 %d] 客戶端請求斷開\n", getpid());
             break;
         }
@@ -103,7 +109,11 @@ void handle_client(int client_fd, struct sockaddr_in *client_addr)
         // 回顯消息（Echo）
         char response[BUFFER_SIZE + 20];
         snprintf(response, sizeof(response), "服務器回顯: %s\n", buffer);
-        send(client_fd, response, strlen(response), 0);
+        sent = send(client_fd, response, strlen(response), 0);
+        if (sent == -1) {
+            perror("[子進程] send response failed");
+            break;  // 發送失敗，斷開連接
+        }
     }
 
     close(client_fd);

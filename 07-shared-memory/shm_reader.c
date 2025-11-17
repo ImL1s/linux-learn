@@ -60,9 +60,19 @@ int main(void)
     printf("\n開始監聽共享內存...\n");
     printf("（按 Ctrl+C 退出）\n\n");
 
+    /*
+     * ⚠️ 教育警告：以下代碼存在競爭條件！
+     *
+     * 問題：
+     *   - 檢查 flag 和讀取數據之間沒有同步
+     *   - writer 可能在讀取過程中修改數據
+     *   - 可能讀到不完整或不一致的數據
+     *
+     * 本例僅用於演示基本共享內存讀取，實際應用必須使用信號量同步！
+     */
     // 循環讀取共享內存
     while (1) {
-        // 檢查是否有新數據
+        // 檢查是否有新數據（⚠️ 不安全！）
         if (shared_mem->flag == 1 && shared_mem->counter > last_counter) {
             printf("┌─ 新消息 #%d ─────────────\n", shared_mem->counter);
             printf("│ 內容: %s\n", shared_mem->message);
@@ -70,7 +80,7 @@ int main(void)
 
             last_counter = shared_mem->counter;
 
-            // 重置標誌（簡單的同步）
+            // 重置標誌（簡單的同步，⚠️ 不安全！）
             shared_mem->flag = 0;
         }
 

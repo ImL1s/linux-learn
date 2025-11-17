@@ -122,12 +122,26 @@ int main(void)
             break;
         }
 
-        // 寫入共享內存
-        shared_mem->flag = 0;  // 標記為正在寫入
+        /*
+         * ⚠️ 教育警告：以下代碼存在競爭條件！
+         *
+         * 問題：
+         *   - flag 的讀寫不是原子操作
+         *   - reader 可能在寫入過程中讀取數據
+         *   - 可能導致數據不一致
+         *
+         * 正確做法：
+         *   - 使用 System V 信號量（sem_get/sem_op）
+         *   - 使用 POSIX 信號量（sem_open/sem_wait/sem_post）
+         *   - 或使用互斥鎖配合共享內存
+         *
+         * 本例僅用於演示基本共享內存操作，實際應用必須添加同步機制！
+         */
+        shared_mem->flag = 0;  // 標記為正在寫入（⚠️ 不安全！）
         shared_mem->counter++;
         strncpy(shared_mem->message, input, sizeof(shared_mem->message) - 1);
         shared_mem->message[sizeof(shared_mem->message) - 1] = '\0';  // 確保 null 終止
-        shared_mem->flag = 1;  // 標記為可讀
+        shared_mem->flag = 1;  // 標記為可讀（⚠️ 不安全！）
 
         printf("  → 已寫入共享內存 (計數: %d)\n\n", shared_mem->counter);
     }

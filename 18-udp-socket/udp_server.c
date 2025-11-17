@@ -55,10 +55,13 @@ int main(void) {
                inet_ntoa(client_addr.sin_addr),
                ntohs(client_addr.sin_port),
                buffer);
-        
+
         // 回顯
-        sendto(sockfd, buffer, n, 0,
-               (struct sockaddr*)&client_addr, addr_len);
+        ssize_t sent = sendto(sockfd, buffer, n, 0,
+                              (struct sockaddr*)&client_addr, addr_len);
+        if (sent == -1) {
+            perror("sendto");
+        }
     }
     
     close(sockfd);

@@ -86,7 +86,10 @@ int create_and_bind(int port)
 
     // 設置地址重用
     int opt = 1;
-    setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1) {
+        perror("setsockopt SO_REUSEADDR");
+        // 繼續執行，這不是致命錯誤
+    }
 
     // 綁定地址
     memset(&addr, 0, sizeof(addr));
@@ -166,7 +169,10 @@ void handle_accept(int listen_fd, int epoll_fd)
 
         // 發送歡迎消息
         const char *welcome = "歡迎使用 epoll 服務器！\n";
-        send(client_fd, welcome, strlen(welcome), 0);
+        ssize_t sent = send(client_fd, welcome, strlen(welcome), 0);
+        if (sent == -1) {
+            perror("send welcome");
+        }
     }
 }
 
@@ -212,7 +218,17 @@ void handle_read(int client_fd, int epoll_fd)
         // Echo 回客戶端
         char response[BUFFER_SIZE + 20];
         snprintf(response, sizeof(response), "服務器回顯: %s", buffer);
-        send(client_fd, response, strlen(response), 0);
+        ssize_t sent = send(client_fd, response, strlen(response), 0);
+        if (sent == -1) {
+            if (errno != EAGAIN && errno != EWOULDBLOCK) {
+                perror("send response");
+                // 發送失敗，關閉連接
+                epoll_ctl(epoll_fd, EPOLL_CTL_DEL, client_fd, NULL);
+                close(client_fd);
+                printf("[斷開] 客戶端 fd=%d（發送錯誤）\n", client_fd);
+                break;
+            }
+        }
     }
 }
 
