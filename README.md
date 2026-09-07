@@ -481,6 +481,12 @@ cd ../utils
 
 歡迎提交 Issue 和 Pull Request 來改進這個學習專案！
 
+---
+
+## 支持
+
+如果這個專案幫你省了點時間，可以[請我喝杯咖啡](https://buymeacoffee.com/iml1s)。
+
 ## 📝 授權
 
 本專案採用 MIT 授權條款。
